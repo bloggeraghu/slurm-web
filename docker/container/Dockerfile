@@ -98,6 +98,8 @@ RUN cd /usr/src && \
     git checkout debian/2.0.0 && \
     debuild -us -uc && \
     dpkg -i ../slurm-web-*deb
+    
+RUN useradd -m www-data
 
 # Create apache2 service file and start it
 RUN rm /etc/apache2/sites-available/default-ssl.conf && \
@@ -113,7 +115,7 @@ COPY apache2.sh /etc/service/apache2/run
 RUN chmod +x /etc/service/apache2/run
 
 # Create munge service file and start it
-RUN chown munge: /var/log/munge /var/lib/munge && \
+RUN chown munge:munge /var/log/munge /var/lib/munge && \
     mkdir -p /etc/service/munge
 COPY munge.sh /etc/service/munge/run
 RUN chmod +x /etc/service/munge/run
